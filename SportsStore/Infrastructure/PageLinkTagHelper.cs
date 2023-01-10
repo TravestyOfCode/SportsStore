@@ -25,6 +25,9 @@ public class PageLinkTagHelper : TagHelper
 
     public string PageAction { get; set; }
 
+    [HtmlAttributeName(DictionaryAttributePrefix = "page-url-")]
+    public Dictionary<string, object> PageUrlValues { get; set; } = new Dictionary<string, object>();
+
     public bool PageClassesEnabled { get; set; } = false;
 
     public string PageClass { get; set; } = string.Empty;
@@ -48,7 +51,10 @@ public class PageLinkTagHelper : TagHelper
             {
                 // Create the link to the page
                 TagBuilder tag = new TagBuilder("a");
-                tag.Attributes["href"] = urlHelper.Action(PageAction, new { productPage = i });
+                
+                // Add Page URL attributes
+                PageUrlValues["productPage"] = i;
+                tag.Attributes["href"] = urlHelper.Action(PageAction, PageUrlValues);
 
                 // Add CSS if enabled
                 if(PageClassesEnabled)
